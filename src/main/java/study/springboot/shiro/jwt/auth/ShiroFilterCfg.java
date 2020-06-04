@@ -1,4 +1,4 @@
-package study.springboot.shiro.jwt.auth.filter;
+package study.springboot.shiro.jwt.auth;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
