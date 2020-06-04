@@ -50,12 +50,12 @@ public class JwtAuthFilter extends BasicHttpAuthenticationFilter {
         //获取token值
         String jwt = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
         //生成AuthenticationToken，然后代理登录和认证
-        JwtToken jwtAuthToken = new JwtToken(jwt);
+        JwtToken jwtToken = new JwtToken(jwt);
         try {
             //（★）委托给Realm进行登录和授权验证
             Subject subject = getSubject(request, response);
             //登录
-            subject.login(jwtAuthToken);
+            subject.login(jwtToken);
         } catch (Exception ex) {
             //log.error(ex.getLocalizedMessage(), ex);
             //登录失败不用处理后面的过滤器会处理并且能通过@ControllerAdvice统一处理相关异常

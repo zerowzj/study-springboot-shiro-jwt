@@ -9,6 +9,7 @@ import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import study.springboot.shiro.jwt.auth.JwtUtils;
 import study.springboot.shiro.jwt.auth.token.JwtToken;
 import study.springboot.shiro.jwt.service.popedom.PopedomService;
 import study.springboot.shiro.jwt.support.redis.RedisClient;
@@ -58,6 +59,7 @@ public class JwtRealm extends AuthorizingRealm {
             throw new UnknownAccountException("token为空");
         }
         //******************** 获取用户信息 ********************
+        JwtUtils.parseToken(jwt);
         String key = RedisKeys.keyOfToken(jwt);
         String text = redisClient.get(key);
         if (Strings.isNullOrEmpty(text)) {
