@@ -1,90 +1,76 @@
 package study.springboot.shiro.jwt.auth;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
+@Slf4j
 public class JwtUtils {
-
-    private final static SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS256;
 
     private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ";
 
-    public static String createToken(Claims claims) {
-        return createToken(claims, null, null);
-    }
+    private final static Algorithm DEFAULT_ALGORITHM = Algorithm.HMAC256(DEFAULT_SECRET_KEY);
 
-    public static String createToken(Claims claims, SignatureAlgorithm algorithm, String base64SecretKey) {
-        if (algorithm == null) {
-            algorithm = DEFAULT_ALGORITHM;
+    /**
+     * 生成jwt
+     */
+    public static String createToken(Map<String, String> claims) {
+        JWTCreator.Builder builder = JWT.create();
+        if (claims != null) {
+            claims.forEach((k, v) -> {
+                builder.withClaim(k, v);
+            });
         }
-        if (base64SecretKey == null) {
-            base64SecretKey = DEFAULT_SECRET_KEY;
+        String token = builder.sign(DEFAULT_ALGORITHM);
+        return token;
+    }
+
+    /**
+     * 解析jwt
+     */
+    public static Map<String, Claim> parseToken(String jwt) {
+        DecodedJWT decodedJWT = JWT.decode(jwt);
+
+        log.info("header: {}", decodedJWT.getHeader());
+        log.info("payload: {}", decodedJWT.getPayload());
+        log.info("signature: {}", decodedJWT.getSignature());
+
+        return decodedJWT.getClaims();
+    }
+
+    /**
+     * 验证jwt
+     */
+    public static boolean verify(String jwt) {
+        JWTVerifier verifier = JWT.require(DEFAULT_ALGORITHM)
+                .build();
+        boolean isOk = true;
+        try {
+            verifier.verify(jwt);
+        } catch (Exception ex) {
+            isOk = false;
         }
-        //payload标准声明和私有声明
-        JwtBuilder builder = Jwts.builder()
-                .setClaims(claims)
-                .signWith(algorithm, base64SecretKey);
-        return builder.compact();
+        return isOk;
     }
-
-    public static Claims parseToken(String jwt) {
-        return parseToken(jwt, null);
-    }
-
-    public static Claims parseToken(String jwt, String base64SecretKey) {
-        if (base64SecretKey == null) {
-            base64SecretKey = DEFAULT_SECRET_KEY;
-        }
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(base64SecretKey)
-                .parseClaimsJws(jwt);
-
-        return jws.getBody();
-    }
-
-//    public boolean verify(String jwt) {
-//        Algorithm algorithm;
-//
-//        switch (signatureAlgorithm) {
-//            case HS256:
-//                algorithm = Algorithm.HMAC256(Base64.decodeBase64(base64EncodedSecretKey));
-//                break;
-//            default:
-//                throw new RuntimeException("不支持该算法");
-//        }
-//
-//        JWTVerifier verifier = JWT.require(algorithm)
-//                .build();
-//        try {
-//            verifier.verify(jwt);
-//        } catch (Exception ex) {
-//
-//        }
-//        /*
-//            // 得到DefaultJwtParser
-//            Claims claims = decode(jwtToken);
-//
-//            if (claims.get("password").equals(user.get("password"))) {
-//                return true;
-//            }
-//        */
-//        return true;
-//    }
 
     public static void main(String[] args) {
-        Claims claims = new DefaultClaims();
-        claims.setId("123123");
+        Map<String, String> claims = Maps.newHashMap();
         claims.put("username", "tom");
         claims.put("password", "123456");
 
         String jwtToken = createToken(claims);
-        System.out.println(jwtToken);
-        /*
-        util.isVerify(jwtToken);
-        System.out.println("合法");
-        */
-        parseToken(jwtToken).entrySet().forEach((entry) -> {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        log.info("{}", jwtToken);
+
+        log.info("合法="+verify(jwtToken));
+        parseToken(jwtToken).forEach((k, v) ->{
+            log.info("{}= {}", k, v.asString());
         });
     }
 }
