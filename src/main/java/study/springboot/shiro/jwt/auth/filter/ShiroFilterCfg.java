@@ -14,13 +14,4 @@ public class ShiroFilterCfg {
         registration.setEnabled(false);
         return registration;
     }
-
-//    @Bean
-//    public FilterRegistrationBean delegatingFilterProxy() {
-//        DelegatingFilterProxy proxy = new DelegatingFilterProxy();
-//        proxy.setTargetFilterLifecycle(true);
-//        proxy.setTargetBeanName("shiroFilter");
-//        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(proxy);
-//        return filterRegistrationBean;
-//    }
 }

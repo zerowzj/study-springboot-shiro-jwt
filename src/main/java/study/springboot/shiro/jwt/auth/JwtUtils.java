@@ -1,52 +1,75 @@
 package study.springboot.shiro.jwt.auth;
 
-import com.auth0.jwt.interfaces.Claim;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
-
-import java.util.Date;
 
 public class JwtUtils {
 
-    private static SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS256;
+    private final static SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS256;
 
-    private static String DEFAULT_KEY = "123123";
+    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ";
 
     public static String createToken(Claims claims) {
-        return createToken(claims, 0, null, null);
+        return createToken(claims, null, null);
     }
 
-    public static String createToken(Claims claims, long ttl,
-                                     SignatureAlgorithm algorithm, String base64SecretKey) {
+    public static String createToken(Claims claims, SignatureAlgorithm algorithm, String base64SecretKey) {
+        if (algorithm == null) {
+            algorithm = DEFAULT_ALGORITHM;
+        }
+        if (base64SecretKey == null) {
+            base64SecretKey = DEFAULT_SECRET_KEY;
+        }
         //payload标准声明和私有声明
         JwtBuilder builder = Jwts.builder()
-                .setClaims(claims);
-        if (algorithm == null || base64SecretKey == null) {
-            builder.signWith(DEFAULT_ALGORITHM, DEFAULT_KEY);
-        } else {
-            builder.signWith(algorithm, base64SecretKey);
-        }
-        //
-        if (ttl > 0) {
-            long expMillis = System.currentTimeMillis() + ttl;
-            Date exp = new Date(expMillis);
-            builder.setExpiration(exp);
-        }
+                .setClaims(claims)
+                .signWith(algorithm, base64SecretKey);
         return builder.compact();
     }
 
     public static Claims parseToken(String jwt) {
-        //得到DefaultJwtParser
-        return Jwts.parser()
-                //签名秘钥
-                .setSigningKey(DEFAULT_KEY)
-                //需要解析的jwt
-                .parseClaimsJws(jwt)
-                .getBody();
+        return parseToken(jwt, null);
     }
+
+    public static Claims parseToken(String jwt, String base64SecretKey) {
+        if (base64SecretKey == null) {
+            base64SecretKey = DEFAULT_SECRET_KEY;
+        }
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(base64SecretKey)
+                .parseClaimsJws(jwt);
+
+        return jws.getBody();
+    }
+
+//    public boolean verify(String jwt) {
+//        Algorithm algorithm;
+//
+//        switch (signatureAlgorithm) {
+//            case HS256:
+//                algorithm = Algorithm.HMAC256(Base64.decodeBase64(base64EncodedSecretKey));
+//                break;
+//            default:
+//                throw new RuntimeException("不支持该算法");
+//        }
+//
+//        JWTVerifier verifier = JWT.require(algorithm)
+//                .build();
+//        try {
+//            verifier.verify(jwt);
+//        } catch (Exception ex) {
+//
+//        }
+//        /*
+//            // 得到DefaultJwtParser
+//            Claims claims = decode(jwtToken);
+//
+//            if (claims.get("password").equals(user.get("password"))) {
+//                return true;
+//            }
+//        */
+//        return true;
+//    }
 
     public static void main(String[] args) {
         Claims claims = new DefaultClaims();

@@ -21,9 +21,6 @@ public class JwtAuthFilter extends BasicHttpAuthenticationFilter {
 
     private static String AUTHORIZATION = "Authorization";
 
-    @Autowired
-    private ArrayList<String> securitySource;
-
     /**
      * 1. 返回true，shiro就直接允许访问url
      * 2. 返回false，shiro才会根据onAccessDenied的方法的返回值决定是否允许访问url
