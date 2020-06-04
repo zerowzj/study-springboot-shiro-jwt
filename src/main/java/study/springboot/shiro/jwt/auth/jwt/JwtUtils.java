@@ -44,9 +44,6 @@ public class JwtUtils {
      */
     public static Map<String, String> parseJwt(String jwt) {
         DecodedJWT decodedJWT = JWT.decode(jwt);
-//        log.info("header: {}", decodedJWT.getHeader());
-//        log.info("payload: {}", decodedJWT.getPayload());
-//        log.info("signature: {}", decodedJWT.getSignature());
         log.info("token: {}", decodedJWT.getToken());
         Map<String, String> claims = Maps.newHashMap();
         decodedJWT.getClaims().forEach((k, v) -> {
