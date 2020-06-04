@@ -27,13 +27,13 @@ public class LoginServiceImpl implements LoginService {
     public Result login(String username, String password) {
         Long userId = 900001L;
         String token = TokenUtils.createToken();
-        //存储用户信息
+        //******************** 存储用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setToken(token);
         userInfo.setUserId(userId);
         redisClient.set(key, JsonUtils.toJson(userInfo));
-        //生成jwt
+        //******************** 生成jwt ********************
         Map<String, String> claims = Maps.newHashMap();
         claims.put("userId", String.valueOf(userId));
         claims.put("token", token);
