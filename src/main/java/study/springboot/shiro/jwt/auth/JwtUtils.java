@@ -60,18 +60,4 @@ public class JwtUtils {
         }
         return isOk;
     }
-
-    public static void main(String[] args) {
-        Map<String, String> claims = Maps.newHashMap();
-        claims.put("username", "tom");
-        claims.put("password", "123456");
-
-        String jwtToken = createJwt(claims);
-        log.info("{}", jwtToken);
-
-        log.info("合法=" + verifyJwt(jwtToken));
-        parseJwt(jwtToken).forEach((k, v) -> {
-            log.info("{}= {}", k, v);
-        });
-    }
 }
