@@ -22,11 +22,11 @@ import java.util.Map;
 public class ShiroCfg {
 
     @Autowired
-    private JwtRealm tokenRealm;
+    private JwtRealm jwtRealm;
     @Autowired
-    private JwtSubjectFactory customSubjectFactory;
+    private JwtSubjectFactory jwtSubjectFactory;
     @Autowired
-    private JwtAuthFilter tokenAuthFilter;
+    private JwtAuthFilter jwtAuthFilter;
 
     /**
      * ====================
@@ -52,9 +52,9 @@ public class ShiroCfg {
     public SecurityManager securityManager(SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //（▲）Realm
-        securityManager.setRealm(tokenRealm);
+        securityManager.setRealm(jwtRealm);
         //（▲）Subject工厂
-        securityManager.setSubjectFactory(customSubjectFactory);
+        securityManager.setSubjectFactory(jwtSubjectFactory);
         //（▲）禁用Session作为存储策略的实现
         DefaultSubjectDAO subjectDAO = (DefaultSubjectDAO) securityManager.getSubjectDAO();
         DefaultSessionStorageEvaluator storageEvaluator = (DefaultSessionStorageEvaluator) subjectDAO.getSessionStorageEvaluator();
@@ -86,7 +86,7 @@ public class ShiroCfg {
         factoryBean.setSecurityManager(securityManager);
         //（▲）过滤器
         Map<String, Filter> filterMap = Maps.newLinkedHashMap();
-        filterMap.put("token_authc", tokenAuthFilter);
+        filterMap.put("jwt_authc", jwtAuthFilter);
         factoryBean.setFilters(filterMap);
         //（▲）登录跳转
 //        factoryBean.setSuccessUrl("/welcome");           //认证成功
@@ -99,7 +99,7 @@ public class ShiroCfg {
         filterChainDefinition.put("/login", "anon");
         //其他资源地址全部需要通过代理登录步骤，注意顺序，必须先进过无状态代理登录后，后面的权限和角色认证才能使用
         //必须放在所有权限设置的最后，不然会导致所有url都被拦截
-        filterChainDefinition.put("/**", "token_authc");
+        filterChainDefinition.put("/**", "jwt_authc");
         factoryBean.setFilterChainDefinitionMap(filterChainDefinition);
 
         return factoryBean;
