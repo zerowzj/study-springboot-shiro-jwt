@@ -12,6 +12,7 @@ import study.springboot.shiro.jwt.support.result.Results;
 import study.springboot.shiro.jwt.support.session.UserInfo;
 import study.springboot.shiro.jwt.support.session.UserInfoContext;
 import study.springboot.shiro.jwt.support.utils.JsonUtils;
+import study.springboot.shiro.jwt.support.utils.TokenUtils;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Result login(String username, String password) {
         Long userId = 900001L;
-        String token = "666666666";
+        String token = TokenUtils.createToken();
         Map<String, String> claims = Maps.newHashMap();
         claims.put("userId", String.valueOf(userId));
         claims.put("token", token);
