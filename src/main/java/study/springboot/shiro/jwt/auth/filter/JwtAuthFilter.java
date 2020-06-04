@@ -19,10 +19,6 @@ public class JwtAuthFilter extends AccessControlFilter {
 
     private static String X_JWT = "x-jwt";
 
-    /**
-     * 1. 返回true，shiro就直接允许访问url
-     * 2. 返回false，shiro才会根据onAccessDenied的方法的返回值决定是否允许访问url
-     */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
                                       Object mappedValue) throws UnauthorizedException {
@@ -31,22 +27,16 @@ public class JwtAuthFilter extends AccessControlFilter {
         return false;
     }
 
-    /**
-     * 表示当访问拒绝时是否已经处理了
-     *
-     * @return true表示需要继续处理；false表示该拦截器实例已经处理了，将直接返回即可
-     */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         log.info(">>>>>>>>>> onAccessDenied");
-
         //******************** 该步骤主要是通过token代理登录shiro ********************
-        //获取jwt
+        //获取Jwt
         String jwt = WebUtils.toHttp(request).getHeader(X_JWT);
         //生成Token，然后代理登录和认证
         JwtToken jwtToken = new JwtToken(jwt);
         try {
-            //（★）委托给Realm进行登录和授权验证
+            //（★）委托给Realm进行登录和授权
             Subject subject = getSubject(request, response);
             //登录
             subject.login(jwtToken);
