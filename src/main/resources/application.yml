@@ -4,12 +4,10 @@ server:
 #
 logging:
   config: classpath:logback.xml
-#####################
-#（★）Spring
-#####################
+#
 spring:
   application:
-    name: study-springboot-shiro-token
+    name: study-springboot-shiro-jwt
   main:
     web-application-type: servlet
     banner-mode: 'off'
