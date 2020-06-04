@@ -1,8 +1,10 @@
 package study.springboot.shiro.jwt.controller.login;
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Headers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import study.springboot.shiro.jwt.service.login.LoginService;
 import study.springboot.shiro.jwt.support.result.Result;
@@ -18,5 +20,10 @@ public class LoginController {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         return loginService.login(username, password);
+    }
+
+    @PostMapping("/logout")
+    public Result logout() {
+        return loginService.logout();
     }
 }

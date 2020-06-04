@@ -9,5 +9,7 @@ import java.io.Serializable;
 @Getter
 public class UserInfo implements Serializable {
 
+    private String token;
+
     private Long userId;
 }
