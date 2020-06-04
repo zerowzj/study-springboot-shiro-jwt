@@ -12,7 +12,7 @@ package study.springboot.shiro.jwt.support.session;
  */
 public class UserInfoContext {
 
-    private static ThreadLocal<UserInfo> LOCAL = new ThreadLocal<>();
+    private static InheritableThreadLocal<UserInfo> LOCAL = new InheritableThreadLocal<>();
 
     /**
      * 获取用户信息

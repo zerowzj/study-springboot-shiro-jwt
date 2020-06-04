@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Component
 public class JwtAuthFilter extends BasicHttpAuthenticationFilter {
 
-    private static String AUTHORIZATION = "Authorization";
+    private static String X_JWT = "x-jwt";
 
     /**
      * 1. 返回true，shiro就直接允许访问url
@@ -48,7 +48,7 @@ public class JwtAuthFilter extends BasicHttpAuthenticationFilter {
         log.info(">>>>>>>>>> onAccessDenied");
         //******************** 该步骤主要是通过token代理登录shiro ********************
         //获取token值
-        String jwt = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
+        String jwt = WebUtils.toHttp(request).getHeader(X_JWT);
         //生成AuthenticationToken，然后代理登录和认证
         JwtToken jwtToken = new JwtToken(jwt);
         try {
