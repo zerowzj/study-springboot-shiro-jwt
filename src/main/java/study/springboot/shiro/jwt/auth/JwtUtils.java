@@ -39,6 +39,7 @@ public class JwtUtils {
 //        log.info("header: {}", decodedJWT.getHeader());
 //        log.info("payload: {}", decodedJWT.getPayload());
 //        log.info("signature: {}", decodedJWT.getSignature());
+        log.info("token: {}", decodedJWT.getToken());
         Map<String, String> claims = Maps.newHashMap();
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
