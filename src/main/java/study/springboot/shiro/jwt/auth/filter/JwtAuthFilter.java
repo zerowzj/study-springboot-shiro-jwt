@@ -6,6 +6,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Component;
+import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
 import study.springboot.shiro.jwt.auth.token.JwtToken;
 import study.springboot.shiro.jwt.support.session.UserInfo;
 import study.springboot.shiro.jwt.support.session.UserInfoContext;
@@ -31,11 +32,15 @@ public class JwtAuthFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         log.info(">>>>>>>>>> onAccessDenied");
         //******************** 该步骤主要是通过token代理登录shiro ********************
-        //获取Jwt
-        String jwt = WebUtils.toHttp(request).getHeader(X_JWT);
-        //生成Token，然后代理登录和认证
-        JwtToken jwtToken = new JwtToken(jwt);
         try {
+            //******************** 获取Jwt ********************
+            String jwt = WebUtils.toHttp(request).getHeader(X_JWT);
+            boolean isOk = JwtUtils.verifyJwt(jwt);
+            if (!isOk) {
+                throw new RuntimeException("签名错误");
+            }
+            //******************** 生成Token，然后代理登录和认证 ********************
+            JwtToken jwtToken = new JwtToken(jwt);
             //（★）委托给Realm进行登录和授权
             Subject subject = getSubject(request, response);
             //登录

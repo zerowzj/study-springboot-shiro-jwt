@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 public class JwtUtils {
 
-    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ";
+    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ369";
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HMAC256;
 
