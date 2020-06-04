@@ -71,7 +71,6 @@ public class JwtRealm extends AuthorizingRealm {
         }
         UserInfo userInfo = JsonUtils.fromJson(text, UserInfo.class);
         UserInfoContext.set(userInfo);
-
         //******************** 创建认证对象 ********************
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userInfo, jwt, getName());
         return info;

@@ -48,6 +48,8 @@ public class LoginServiceImpl implements LoginService {
     public Result logout() {
         String token = UserInfoContext.get().getToken();
         log.info("===> {}", token);
+        String key = RedisKeys.keyOfToken(token);
+        redisClient.delete(key);
         return Results.success();
     }
 }
