@@ -3,7 +3,7 @@ package test.study.springboot.shiro.jwt;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import study.springboot.shiro.jwt.auth.JwtUtils;
+import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
 
 import java.util.Map;
 

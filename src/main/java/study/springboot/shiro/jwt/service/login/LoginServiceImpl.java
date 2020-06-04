@@ -3,7 +3,7 @@ package study.springboot.shiro.jwt.service.login;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import study.springboot.shiro.jwt.auth.JwtUtils;
+import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
 import study.springboot.shiro.jwt.support.redis.RedisClient;
 import study.springboot.shiro.jwt.support.redis.RedisKeys;
 import study.springboot.shiro.jwt.support.result.Result;

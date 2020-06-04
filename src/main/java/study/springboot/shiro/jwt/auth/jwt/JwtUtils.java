@@ -1,4 +1,4 @@
-package study.springboot.shiro.jwt.auth;
+package study.springboot.shiro.jwt.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
@@ -15,19 +15,27 @@ public class JwtUtils {
 
     private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ";
 
-    private final static Algorithm DEFAULT_ALGORITHM = Algorithm.HMAC256(DEFAULT_SECRET_KEY);
+    private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HMAC256;
 
     /**
      * 生成jwt
      */
     public static String createJwt(Map<String, String> claims) {
+        return createJwt(claims, null, null);
+    }
+
+    /**
+     * 生成jwt
+     */
+    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
+        Algorithm algorithm = transform(signAlg, secretKey);
         JWTCreator.Builder builder = JWT.create();
         if (claims != null) {
             claims.forEach((k, v) -> {
                 builder.withClaim(k, v);
             });
         }
-        String jwt = builder.sign(DEFAULT_ALGORITHM);
+        String jwt = builder.sign(algorithm);
         return jwt;
     }
 
@@ -51,7 +59,15 @@ public class JwtUtils {
      * 验证jwt
      */
     public static boolean verifyJwt(String jwt) {
-        JWTVerifier verifier = JWT.require(DEFAULT_ALGORITHM)
+        return verifyJwt(jwt, null, null);
+    }
+
+    /**
+     * 验证jwt
+     */
+    public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
+        Algorithm algorithm = transform(signAlg, secretKey);
+        JWTVerifier verifier = JWT.require(algorithm)
                 .build();
         boolean isOk = true;
         try {
@@ -60,5 +76,26 @@ public class JwtUtils {
             isOk = false;
         }
         return isOk;
+    }
+
+    private static Algorithm transform(SignAlg signAlg, String secretKey) {
+        if (signAlg == null) {
+            signAlg = DEFAULT_ALGORITHM;
+        }
+        if (secretKey == null) {
+            secretKey = DEFAULT_SECRET_KEY;
+        }
+        Algorithm algorithm;
+        switch (signAlg) {
+            case HMAC256:
+                algorithm = Algorithm.HMAC256(secretKey);
+                break;
+            case HMAC512:
+                algorithm = Algorithm.HMAC512(secretKey);
+                break;
+            default:
+                throw new RuntimeException("不支持的算法");
+        }
+        return algorithm;
     }
 }
