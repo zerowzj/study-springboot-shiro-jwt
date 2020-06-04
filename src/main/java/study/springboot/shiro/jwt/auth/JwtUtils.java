@@ -50,11 +50,11 @@ public class JwtUtils {
 
     public static void main(String[] args) {
         Claims claims = new DefaultClaims();
+        claims.setId("123123");
         claims.put("username", "tom");
         claims.put("password", "123456");
 
         String jwtToken = createToken(claims);
-
         System.out.println(jwtToken);
         /*
         util.isVerify(jwtToken);
