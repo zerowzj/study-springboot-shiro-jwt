@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 public class JwtUtils {
 
-    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ369";
+    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ123";
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HMAC256;
 
@@ -38,7 +38,6 @@ public class JwtUtils {
         String jwt = builder.sign(algorithm);
         return jwt;
     }
-
 
     /**
      * 验证jwt
@@ -68,7 +67,6 @@ public class JwtUtils {
      */
     public static Map<String, String> parseJwt(String jwt) {
         DecodedJWT decodedJWT = JWT.decode(jwt);
-        log.info("token: {}", decodedJWT.getToken());
         Map<String, String> claims = Maps.newHashMap();
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
