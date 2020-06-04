@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -21,34 +20,36 @@ public class JwtUtils {
     /**
      * 生成jwt
      */
-    public static String createToken(Map<String, String> claims) {
+    public static String createJwt(Map<String, String> claims) {
         JWTCreator.Builder builder = JWT.create();
         if (claims != null) {
             claims.forEach((k, v) -> {
                 builder.withClaim(k, v);
             });
         }
-        String token = builder.sign(DEFAULT_ALGORITHM);
-        return token;
+        String jwt = builder.sign(DEFAULT_ALGORITHM);
+        return jwt;
     }
 
     /**
      * 解析jwt
      */
-    public static Map<String, Claim> parseToken(String jwt) {
+    public static Map<String, String> parseJwt(String jwt) {
         DecodedJWT decodedJWT = JWT.decode(jwt);
-
-        log.info("header: {}", decodedJWT.getHeader());
-        log.info("payload: {}", decodedJWT.getPayload());
-        log.info("signature: {}", decodedJWT.getSignature());
-
-        return decodedJWT.getClaims();
+//        log.info("header: {}", decodedJWT.getHeader());
+//        log.info("payload: {}", decodedJWT.getPayload());
+//        log.info("signature: {}", decodedJWT.getSignature());
+        Map<String, String> claims = Maps.newHashMap();
+        decodedJWT.getClaims().forEach((k, v) -> {
+            claims.put(k, v.asString());
+        });
+        return claims;
     }
 
     /**
      * 验证jwt
      */
-    public static boolean verify(String jwt) {
+    public static boolean verifyJwt(String jwt) {
         JWTVerifier verifier = JWT.require(DEFAULT_ALGORITHM)
                 .build();
         boolean isOk = true;
@@ -65,12 +66,12 @@ public class JwtUtils {
         claims.put("username", "tom");
         claims.put("password", "123456");
 
-        String jwtToken = createToken(claims);
+        String jwtToken = createJwt(claims);
         log.info("{}", jwtToken);
 
-        log.info("合法="+verify(jwtToken));
-        parseToken(jwtToken).forEach((k, v) ->{
-            log.info("{}= {}", k, v.asString());
+        log.info("合法=" + verifyJwt(jwtToken));
+        parseJwt(jwtToken).forEach((k, v) -> {
+            log.info("{}= {}", k, v);
         });
     }
 }

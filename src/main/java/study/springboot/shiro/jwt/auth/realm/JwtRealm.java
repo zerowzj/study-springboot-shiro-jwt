@@ -1,5 +1,6 @@
 package study.springboot.shiro.jwt.auth.realm;
 
+import com.auth0.jwt.interfaces.Claim;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -17,6 +18,8 @@ import study.springboot.shiro.jwt.support.redis.RedisKeys;
 import study.springboot.shiro.jwt.support.session.UserInfo;
 import study.springboot.shiro.jwt.support.session.UserInfoContext;
 import study.springboot.shiro.jwt.support.utils.JsonUtils;
+
+import java.util.Map;
 
 /**
  * 主要用于Shiro的登录认证以及权限认证
@@ -52,15 +55,17 @@ public class JwtRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         log.info(">>>>>>>>>> 获取用户认证信息");
-        //******************** 获取token ********************
+        //******************** 获取jwt ********************
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String jwt = (String) jwtToken.getPrincipal();
         if (StringUtils.isEmpty(jwt)) {
             throw new UnknownAccountException("token为空");
         }
+        //******************** 获取token ********************
+        Map<String, String> claims = JwtUtils.parseJwt(jwt);
+        String token = claims.get("token");
         //******************** 获取用户信息 ********************
-        JwtUtils.parseToken(jwt);
-        String key = RedisKeys.keyOfToken(jwt);
+        String key = RedisKeys.keyOfToken(token);
         String text = redisClient.get(key);
         if (Strings.isNullOrEmpty(text)) {
             throw new IncorrectCredentialsException("token过期或错误");
