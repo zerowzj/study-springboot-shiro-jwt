@@ -64,7 +64,7 @@ public class JwtRealm extends AuthorizingRealm {
         Map<String, String> claims = JwtUtils.parseJwt(jwt);
         String token = claims.get("token");
         //******************** 获取用户信息 ********************
-        String key = RedisKeys.keyOfToken(token);
+        String key = RedisKeys.keyOfUserInfo(token);
         String text = redisClient.get(key);
         if (Strings.isNullOrEmpty(text)) {
             throw new IncorrectCredentialsException("token过期或错误");

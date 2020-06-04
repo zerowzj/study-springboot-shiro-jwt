@@ -12,7 +12,7 @@ public class RedisKeys {
         return Joiner.on(SEPARATOR).skipNulls().join(key);
     }
 
-    public static String keyOfToken(String token) {
+    public static String keyOfUserInfo(String token) {
         return format(APP, "token", token);
     }
 }
