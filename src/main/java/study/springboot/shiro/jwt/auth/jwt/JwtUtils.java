@@ -39,18 +39,6 @@ public class JwtUtils {
         return jwt;
     }
 
-    /**
-     * 解析jwt
-     */
-    public static Map<String, String> parseJwt(String jwt) {
-        DecodedJWT decodedJWT = JWT.decode(jwt);
-        log.info("token: {}", decodedJWT.getToken());
-        Map<String, String> claims = Maps.newHashMap();
-        decodedJWT.getClaims().forEach((k, v) -> {
-            claims.put(k, v.asString());
-        });
-        return claims;
-    }
 
     /**
      * 验证jwt
@@ -73,6 +61,19 @@ public class JwtUtils {
             isOk = false;
         }
         return isOk;
+    }
+
+    /**
+     * 解析jwt
+     */
+    public static Map<String, String> parseJwt(String jwt) {
+        DecodedJWT decodedJWT = JWT.decode(jwt);
+        log.info("token: {}", decodedJWT.getToken());
+        Map<String, String> claims = Maps.newHashMap();
+        decodedJWT.getClaims().forEach((k, v) -> {
+            claims.put(k, v.asString());
+        });
+        return claims;
     }
 
     private static Algorithm transform(SignAlg signAlg, String secretKey) {
