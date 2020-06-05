@@ -18,15 +18,14 @@ public class JwtUtils {
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HMAC256;
 
     /**
+     * ====================
      * 生成jwt
+     * ====================
      */
     public static String createJwt(Map<String, String> claims) {
         return createJwt(claims, null, null);
     }
 
-    /**
-     * 生成jwt
-     */
     public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         JWTCreator.Builder builder = JWT.create();
@@ -40,15 +39,14 @@ public class JwtUtils {
     }
 
     /**
+     * ====================
      * 验证jwt
+     * ====================
      */
     public static boolean verifyJwt(String jwt) {
         return verifyJwt(jwt, null, null);
     }
 
-    /**
-     * 验证jwt
-     */
     public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         JWTVerifier verifier = JWT.require(algorithm)
@@ -63,7 +61,9 @@ public class JwtUtils {
     }
 
     /**
+     * ====================
      * 解析jwt
+     * ====================
      */
     public static Map<String, String> parseJwt(String jwt) {
         DecodedJWT decodedJWT = JWT.decode(jwt);
