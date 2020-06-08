@@ -19,7 +19,7 @@ public class JwtUtils {
 
     /**
      * ====================
-     * 生成jwt
+     * 生成Jwt
      * ====================
      */
     public static String createJwt(Map<String, String> claims) {
@@ -40,7 +40,7 @@ public class JwtUtils {
 
     /**
      * ====================
-     * 验证jwt
+     * 验证Jwt
      * ====================
      */
     public static boolean verifyJwt(String jwt) {
@@ -62,7 +62,7 @@ public class JwtUtils {
 
     /**
      * ====================
-     * 解析jwt
+     * 解析Jwt
      * ====================
      */
     public static Map<String, String> parseJwt(String jwt) {
@@ -90,7 +90,7 @@ public class JwtUtils {
                 algorithm = Algorithm.HMAC512(secretKey);
                 break;
             default:
-                throw new RuntimeException("不支持的算法");
+                throw new IllegalArgumentException("不支持的算法");
         }
         return algorithm;
     }
