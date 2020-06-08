@@ -35,7 +35,7 @@ public class JwtAuthFilter extends AccessControlFilter {
         log.info(">>>>>>>>>> onAccessDenied");
         //该步骤主要是通过token代理登录shiro
         try {
-            //******************** <1>.获取Jwt ********************
+            //******************** <1> 获取Jwt ********************
             HttpServletRequest request = WebUtils.toHttp(servletRequest);
             if (!CookieUtils.contain(request, C_JWT)) {
                 log.error("cookie未包含登录信息");
@@ -46,9 +46,9 @@ public class JwtAuthFilter extends AccessControlFilter {
             if (!isLegal) {
                 throw new RuntimeException("签名错误");
             }
-            //******************** <2>.生成Token，然后代理登录和认证 ********************
+            //******************** <2> 生成Token，然后代理登录 ********************
             JwtToken jwtToken = new JwtToken(jwt);
-            //（★）委托给Realm进行登录和授权
+            //（★）委托给Realm进行登录
             Subject subject = getSubject(servletRequest, servletResponse);
             //登录
             subject.login(jwtToken);

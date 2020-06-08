@@ -54,16 +54,18 @@ public class JwtRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         log.info(">>>>>>>>>> 获取用户认证信息");
-        //******************** 获取jwt ********************
+        //******************** <1> 获取jwt ********************
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String jwt = (String) jwtToken.getPrincipal();
         if (StringUtils.isEmpty(jwt)) {
             throw new UnknownAccountException("token为空");
         }
-        //******************** 获取token ********************
+
+        //******************** <2> 获取token ********************
         Map<String, String> claims = JwtUtils.parseJwt(jwt);
         String token = claims.get("token");
-        //******************** 获取用户信息 ********************
+
+        //******************** <3> 获取用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
         String text = redisClient.get(key);
         if (Strings.isNullOrEmpty(text)) {
@@ -71,7 +73,8 @@ public class JwtRealm extends AuthorizingRealm {
         }
         UserInfo userInfo = JsonUtils.fromJson(text, UserInfo.class);
         UserInfoContext.set(userInfo);
-        //******************** 创建认证对象 ********************
+
+        //******************** <4> 创建认证对象 ********************
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userInfo, jwt, getName());
         return info;
     }
