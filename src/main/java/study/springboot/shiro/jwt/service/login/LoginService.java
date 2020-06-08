@@ -4,7 +4,7 @@ import study.springboot.shiro.jwt.support.result.Result;
 
 public interface LoginService {
 
-    Result login(String username, String password);
+    String login(String username, String password);
 
     Result logout();
 }

@@ -24,29 +24,27 @@ public class LoginServiceImpl implements LoginService {
     private RedisClient redisClient;
 
     @Override
-    public Result login(String username, String password) {
-        //******************** 获取用户信息 ********************
+    public String login(String username, String password) {
+        //******************** <1> 获取用户信息 ********************
         Long userId = 900001L;
 
-        //******************** 生成token ********************
+        //******************** <2> 生成token ********************
         String token = TokenUtils.createToken();
 
-        //******************** 存储用户信息 ********************
+        //******************** <3> 存储用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setToken(token);
         userInfo.setUserId(userId);
         redisClient.set(key, JsonUtils.toJson(userInfo));
 
-        //******************** 生成jwt ********************
+        //******************** <4> 生成jwt ********************
         Map<String, String> claims = Maps.newHashMap();
         claims.put("userId", String.valueOf(userId));
         claims.put("token", token);
         String jwt = JwtUtils.createJwt(claims);
 
-        Map<String, Object> data = Maps.newHashMap();
-        data.put("jwt", jwt);
-        return Results.success(data);
+        return jwt;
     }
 
     @Override
