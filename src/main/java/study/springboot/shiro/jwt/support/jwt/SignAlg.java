@@ -1,4 +1,4 @@
-package study.springboot.shiro.jwt.auth.jwt;
+package study.springboot.shiro.jwt.support.jwt;
 
 public enum SignAlg {
 

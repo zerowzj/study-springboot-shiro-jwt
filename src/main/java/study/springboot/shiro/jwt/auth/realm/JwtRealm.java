@@ -14,7 +14,7 @@ import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
+import study.springboot.shiro.jwt.support.jwt.JwtUtils;
 import study.springboot.shiro.jwt.auth.token.JwtToken;
 import study.springboot.shiro.jwt.service.popedom.PopedomService;
 import study.springboot.shiro.jwt.support.redis.RedisClient;

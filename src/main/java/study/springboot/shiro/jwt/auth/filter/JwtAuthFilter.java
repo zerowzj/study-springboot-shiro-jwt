@@ -6,7 +6,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Component;
-import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
+import study.springboot.shiro.jwt.support.jwt.JwtUtils;
 import study.springboot.shiro.jwt.auth.token.JwtToken;
 import study.springboot.shiro.jwt.support.session.UserInfo;
 import study.springboot.shiro.jwt.support.session.UserInfoContext;

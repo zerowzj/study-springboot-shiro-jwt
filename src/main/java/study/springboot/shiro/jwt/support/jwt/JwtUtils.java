@@ -1,4 +1,4 @@
-package study.springboot.shiro.jwt.auth.jwt;
+package study.springboot.shiro.jwt.support.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
