@@ -51,13 +51,13 @@ public class JwtUtils {
         Algorithm algorithm = transform(signAlg, secretKey);
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
-        boolean isOk = true;
+        boolean isLegal = true;
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
-            isOk = false;
+            isLegal = false;
         }
-        return isOk;
+        return isLegal;
     }
 
     /**

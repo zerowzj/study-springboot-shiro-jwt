@@ -2,6 +2,7 @@ package study.springboot.shiro.jwt.service.login;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.springboot.shiro.jwt.auth.jwt.JwtUtils;
@@ -25,20 +26,20 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login(String username, String password) {
-        //******************** <1> 获取用户信息 ********************
+        //******************** <1>.获取用户信息 ********************
         Long userId = 900001L;
 
-        //******************** <2> 生成token ********************
+        //******************** <2>.生成token ********************
         String token = TokenGenerator.createToken();
 
-        //******************** <3> 存储用户信息 ********************
+        //******************** <3>.存储用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setToken(token);
         userInfo.setUserId(userId);
         redisClient.set(key, JsonUtils.toJson(userInfo));
 
-        //******************** <4> 生成jwt ********************
+        //******************** <4>.生成jwt ********************
         Map<String, String> claims = Maps.newHashMap();
         claims.put("userId", String.valueOf(userId));
         claims.put("token", token);
@@ -53,6 +54,8 @@ public class LoginServiceImpl implements LoginService {
         log.info("===> {}", token);
         String key = RedisKeys.keyOfUserInfo(token);
         redisClient.delete(key);
+        //
+        SecurityUtils.getSubject().logout();
         return Results.success();
     }
 }

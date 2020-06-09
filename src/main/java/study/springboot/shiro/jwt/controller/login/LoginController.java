@@ -24,9 +24,9 @@ public class LoginController {
         String password = loginRequest.getPassword();
         //
         String jwt = loginService.login(username, password);
+        //
         Map<String, Object> data = Maps.newHashMap();
         data.put("jwt", jwt);
-        //
         return Results.success(data);
     }
 
