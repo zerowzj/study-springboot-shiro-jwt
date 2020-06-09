@@ -80,7 +80,10 @@ public class JwtRealm extends AuthorizingRealm {
         UserInfoContext.set(userInfo);
 
         //******************** <4>.创建认证对象 ********************
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userInfo, jwt, getName());
+        Object principal = userInfo;
+        Object credentials = jwt;
+        String realmName = getName();
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, realmName);
         return info;
     }
 
