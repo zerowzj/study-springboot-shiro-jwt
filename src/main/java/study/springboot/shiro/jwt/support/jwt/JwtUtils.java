@@ -11,11 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 
 @Slf4j
-public class JwtUtils {
+public final class JwtUtils {
 
     private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ123";
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HMAC256;
+
+    private JwtUtils() {
+    }
 
     /**
      * ====================
