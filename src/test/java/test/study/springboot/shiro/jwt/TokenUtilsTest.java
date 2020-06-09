@@ -2,7 +2,7 @@ package test.study.springboot.shiro.jwt;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import study.springboot.shiro.jwt.support.utils.TokenUtils;
+import study.springboot.shiro.jwt.support.utils.TokenGenerator;
 
 @Slf4j
 public class TokenUtilsTest {
@@ -11,9 +11,9 @@ public class TokenUtilsTest {
     public void test() {
         String name = "wzj";
 
-        String token = TokenUtils.createToken();
+        String token = TokenGenerator.createToken();
         log.info("{}", token);
-        token = TokenUtils.createToken();
+        token = TokenGenerator.createToken();
         log.info("{}", token);
     }
 }

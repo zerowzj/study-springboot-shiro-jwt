@@ -4,7 +4,7 @@ import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
 
-public class TokenUtils {
+public class TokenGenerator {
 
     public static String createToken() {
         EthernetAddress ethernetAddress = EthernetAddress.fromInterface();

@@ -12,7 +12,7 @@ import study.springboot.shiro.jwt.support.result.Results;
 import study.springboot.shiro.jwt.support.session.UserInfo;
 import study.springboot.shiro.jwt.support.session.UserInfoContext;
 import study.springboot.shiro.jwt.support.utils.JsonUtils;
-import study.springboot.shiro.jwt.support.utils.TokenUtils;
+import study.springboot.shiro.jwt.support.utils.TokenGenerator;
 
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
         Long userId = 900001L;
 
         //******************** <2> 生成token ********************
-        String token = TokenUtils.createToken();
+        String token = TokenGenerator.createToken();
 
         //******************** <3> 存储用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
