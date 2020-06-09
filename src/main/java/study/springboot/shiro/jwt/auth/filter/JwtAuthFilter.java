@@ -41,15 +41,13 @@ public class JwtAuthFilter extends AccessControlFilter {
             if (!isLegal) {
                 throw new RuntimeException("签名错误");
             }
+
             //******************** <2>.生成Token，然后代理登录 ********************
             JwtToken jwtToken = new JwtToken(jwt);
             //（★）委托给Realm进行登录
             Subject subject = getSubject(servletRequest, servletResponse);
-            //登录
             subject.login(jwtToken);
         } catch (Exception ex) {
-            //log.error(ex.getLocalizedMessage(), ex);
-            //登录失败不用处理后面的过滤器会处理并且能通过@ControllerAdvice统一处理相关异常
             throw ex;
         }
         return true;
