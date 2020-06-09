@@ -1,7 +1,12 @@
 package study.springboot.shiro.jwt.auth.realm;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -53,19 +58,19 @@ public class JwtRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        log.info(">>>>>>>>>> 获取用户认证信息");
-        //******************** <1> 获取jwt ********************
+        log.info(">>>>>>>>>> doGetAuthenticationInfo");
+        //******************** <1>.获取jwt ********************
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String jwt = (String) jwtToken.getPrincipal();
         if (StringUtils.isEmpty(jwt)) {
             throw new UnknownAccountException("token为空");
         }
 
-        //******************** <2> 获取token ********************
+        //******************** <2>.获取token ********************
         Map<String, String> claims = JwtUtils.parseJwt(jwt);
         String token = claims.get("token");
 
-        //******************** <3> 获取用户信息 ********************
+        //******************** <3>.获取用户信息 ********************
         String key = RedisKeys.keyOfUserInfo(token);
         String text = redisClient.get(key);
         if (Strings.isNullOrEmpty(text)) {
@@ -74,7 +79,7 @@ public class JwtRealm extends AuthorizingRealm {
         UserInfo userInfo = JsonUtils.fromJson(text, UserInfo.class);
         UserInfoContext.set(userInfo);
 
-        //******************** <4> 创建认证对象 ********************
+        //******************** <4>.创建认证对象 ********************
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userInfo, jwt, getName());
         return info;
     }
@@ -86,6 +91,7 @@ public class JwtRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        log.info(">>>>>>>>>> doGetAuthorizationInfo");
         return null;
     }
 }
